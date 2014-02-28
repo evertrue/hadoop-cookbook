@@ -1,3 +1,5 @@
-include_recipe "hadoop::default"
+# coding=utf-8
 
-package "hadoop-hdfs-secondarynamenode"
+include_recipe 'hadoop::default'
+
+package 'hadoop-hdfs-secondarynamenode'

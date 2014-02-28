@@ -1,9 +1,11 @@
+# coding: utf-8
 default['hadoop']['core-site'] = {}
 default['hadoop']['hdfs-site'] = {}
 default['hadoop']['hadoop-policy'] = {}
 default['hadoop']['mapred-site'] = {}
+default['hadoop']['hosts'] = {}
 
-default['hadoop']['cluster-name'] = "default"
+default['hadoop']['cluster-name'] = 'default'
 default['hadoop']['group'] = 'hadoop'
 default['hadoop']['hdfs_group'] = 'hdfs'
 default['hadoop']['hdfs_user'] = 'hdfs'
@@ -16,7 +18,7 @@ when 'debian'
   default['hadoop']['conf_root'] = '/etc/hadoop'
 end
 
-default['hadoop']['data_root'] = "/data"
+default['hadoop']['data_root'] = '/data'
 default['hadoop']['data_dir'] = "#{node['hadoop']['data_root']}/dfs"
 
 default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
@@ -27,3 +29,5 @@ default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
 
 # hdfs-site.xml
 default['hadoop']['hdfs-site']['dfs.permissions.superusergroup'] = 'hadoop'
+
+set['java']['jdk_version'] = '7'
