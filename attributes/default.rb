@@ -11,6 +11,15 @@ default['hadoop']['hdfs_group'] = 'hdfs'
 default['hadoop']['hdfs_user'] = 'hdfs'
 default['hadoop']['mapred_user'] = 'mapred'
 
+default['hadoop']['guava']['version'] = '14.0.1'
+default['hadoop']['guava']['delete_version'] = '11.0.2'
+default['hadoop']['guava']['checksum'] =
+  'd69df3331840605ef0e5fe4add60f2d28e870e3820937ea29f713d2035d9ab97'
+
+default['hadoop']['lib_dir'] = '/usr/lib/hadoop'
+default['hadoop']['mapred_lib_dir'] = '/usr/lib/hadoop-0.20-mapreduce'
+default['hadoop']['hdfs_lib_dir'] = '/usr/lib/hadoop-hdfs'
+
 case node['platform_family']
 when 'redhat'
   default['hadoop']['conf_root'] = '/etc/hadoop-0.20'

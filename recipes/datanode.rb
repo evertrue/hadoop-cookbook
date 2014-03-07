@@ -31,3 +31,26 @@ end
     action [:enable, :start]
   end
 end
+
+%w(
+  lib_dir
+  mapred_lib_dir
+  hdfs_lib_dir
+).each do |dir|
+  file node['hadoop'][dir] +
+    "/lib/guava-#{node['hadoop']['guava']['delete_version']}.jar" do
+    action :delete
+  end
+
+  remote_file node['hadoop'][dir] +
+    "/lib/guava-#{node['hadoop']['guava']['version']}.jar" do
+    owner    'root'
+    group    'root'
+    mode     0644
+    source   'file://' + Chef::Config['file_cache_path'] +
+      "/guava-#{node['hadoop']['guava']['version']}.jar"
+    checksum node['hadoop']['guava']['checksum']
+    notifies :restart, 'service[hadoop-hdfs-datanode]'
+    notifies :restart, 'service[hadoop-0.20-mapreduce-tasktracker]'
+  end
+end

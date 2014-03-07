@@ -41,7 +41,21 @@ execute 'update_hadoop_alternatives' do
   action :run
 end
 
-Chef::Log.info("My recipes: #{node['recipes'].join(', ')}")
+# Old version
+# $ sum guava-11.0.2.jar
+# 38428  1610
+
+remote_file Chef::Config['file_cache_path'] +
+  "/guava-#{node['hadoop']['guava']['version']}.jar" do
+  owner 'root'
+  group 'root'
+  mode 0644
+  source 'http://search.maven.org/remotecontent?' \
+    'filepath=com/google/guava/guava/' +
+      node['hadoop']['guava']['version'] +
+      "/guava-#{node['hadoop']['guava']['version']}.jar"
+  checksum 'd69df3331840605ef0e5fe4add60f2d28e870e3820937ea29f713d2035d9ab97'
+end
 
 %w{
   namenode
