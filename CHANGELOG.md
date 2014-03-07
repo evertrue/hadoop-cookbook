@@ -1,3 +1,7 @@
+## 1.1.1
+
+* Replace default guava 11.0.02 with our version 14.0.1
+
 ## 1.1.0
 
 * Change the logic for finding namenodes and datanodes at bootstrap
