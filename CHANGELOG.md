@@ -1,3 +1,8 @@
+## 1.1.2
+
+* Fix (again) how we populate the FQDNs for the namenode and jobtracker attributes (includes adding a Chef version constraint of 11.10.0)
+* Fix attribute reference for mapred.local.dir
+
 ## 1.1.1
 
 * Replace default guava 11.0.02 with our version 14.0.1
