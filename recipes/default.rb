@@ -93,7 +93,7 @@ node.set['hadoop']['core-site']['fs.defaultFS'] = "hdfs://" \
   "#{node['hadoop']['hosts']['namenode']}/"
 node.set['hadoop']['mapred-site'] = {
   'mapred.job.tracker' => "#{node['hadoop']['hosts']['jobtracker']}:8021",
-  'mapred.local.dir' => "#{node['data_root']}/mapred/local"
+  'mapred.local.dir' => "#{node['hadoop']['data_root']}/mapred/local"
 }
 
 directory node['hadoop']['mapred-site']['mapred.local.dir'] do
