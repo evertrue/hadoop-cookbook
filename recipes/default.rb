@@ -8,6 +8,14 @@
 # All rights reserved - Do Not Redistribute
 #
 
+if Gem::Version.new(Chef::VERSION) < Gem::Version.new('11.10.0')
+  # We require this version because otherwise node.recipes does not include
+  # recipes included via include_recipe, which we use to figure out who's
+  # who in our cluster.
+  fail 'Chef version 11.10.0 or higher is required to run this recipe ' \
+    "(Found: #{Chef::VERSION})."
+end
+
 case node['platform_family']
 when 'debian'
   include_recipe 'apt'
@@ -57,23 +65,24 @@ remote_file Chef::Config['file_cache_path'] +
   checksum 'd69df3331840605ef0e5fe4add60f2d28e870e3820937ea29f713d2035d9ab97'
 end
 
-%w{
+%w(
   namenode
   jobtracker
-}.each do |nodetype|
-  if node['hadoop'][nodetype]
-  elsif node['hadoop']['hosts']["#{nodetype}_default"]
-    node.set['hadoop']['hosts'][nodetype] =
-      node['hadoop']['hosts']["#{nodetype}_default"]
-  elsif node.roles.include?(nodetype)
-    node.set['hadoop']['hosts'][nodetype] = node['fqdn']
+).each do |nodetype|
+  if node.roles.include?(nodetype) ||
+    node.recipes.include?("hadoop::#{nodetype}")
+    node.set['hadoop']['hosts'][nodetype] = node['hadoop']['local_fqdn']
+    Chef::Log.info "Set #{nodetype} to self because it is in one of my" \
+      "roles/recipes"
   else
     r = search(
       :node,
-      "chef_environment:#{node.chef_environment} AND " +
-      "hadoop_cluster-name:#{node['hadoop']['cluster-name']} AND " +
-      "roles:#{nodetype}"
+      "chef_environment:#{node.chef_environment} AND " \
+        "hadoop_cluster-name:#{node['hadoop']['cluster-name']} AND " \
+        "(recipes:hadoop\\:\\:#{nodetype} OR " \
+        "roles:#{nodetype})"
     )
+
     if r.empty?
       fail "Could not find the #{nodetype}"
     elsif r.count > 1
@@ -82,11 +91,12 @@ end
     else
       node.set['hadoop']['hosts'][nodetype] = r.first['fqdn']
     end
+
+    Chef::Log.debug "Set #{nodetype} from search results: #{r.inspect}"
   end
-  if !node['hadoop']['hosts'][nodetype] ||
-    node['hadoop']['hosts'][nodetype].empty?
-    fail "#{nodetype} is not set"
-  end
+
+  Chef::Log.info "Hadoop: Set #{nodetype} to " \
+    "<#{node['hadoop']['hosts'][nodetype]}>"
 end
 
 node.set['hadoop']['core-site']['fs.defaultFS'] = "hdfs://" \

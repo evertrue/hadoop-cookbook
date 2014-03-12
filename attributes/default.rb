@@ -38,5 +38,6 @@ default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
 
 # hdfs-site.xml
 default['hadoop']['hdfs-site']['dfs.permissions.superusergroup'] = 'hadoop'
+default['hadoop']['local_fqdn'] = node['fqdn']
 
 set['java']['jdk_version'] = '7'
