@@ -27,7 +27,7 @@ when 'debian'
   default['hadoop']['conf_root'] = '/etc/hadoop'
 end
 
-default['hadoop']['data_root'] = '/data'
+default['hadoop']['data_root'] = '/mnt/data'
 default['hadoop']['data_dir'] = "#{node['hadoop']['data_root']}/dfs"
 
 default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
