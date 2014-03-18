@@ -1,3 +1,7 @@
+## 1.2.2
+
+* Fix broken notify structure.
+
 ## 1.2.1
 
 * Upgrade Java cookbook to 1.21.2

@@ -46,7 +46,7 @@ end
       source   'file://' + Chef::Config['file_cache_path'] + '/hadoop' +
         lib['new_file']
       checksum lib['checksum']
-      notifies :restart, 'service[hadoop-hdfs-namenode]'
+      notifies :restart, 'service[hadoop-0.20-mapreduce-jobtracker]'
     end
   end
 end
