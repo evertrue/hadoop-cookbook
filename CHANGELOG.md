@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Upgrade Java cookbook to 1.21.2
+
 ## 1.2.0
 
 * Move data to /mnt/data
