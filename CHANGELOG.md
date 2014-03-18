@@ -1,3 +1,8 @@
+## 1.2.0
+
+* Move data to /mnt/data
+* [PLATFORM-311](https://evertroops.atlassian.net/browse/PLATFORM-311) - Replace Jackson JARs with newer versions (in the process, somewhat refactor how JAR replacements are handled).
+
 ## 1.1.2
 
 * Fix (again) how we populate the FQDNs for the namenode and jobtracker attributes (includes adding a Chef version constraint of 11.10.0)
