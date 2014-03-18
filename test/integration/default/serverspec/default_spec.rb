@@ -11,12 +11,28 @@ describe 'Hadoop' do
     /usr/lib/hadoop-hdfs
     /usr/lib/hadoop-0.20-mapreduce
   ).each do |dir|
-    describe file("#{dir}/lib/guava-11.0.2.jar") do
-      it { should_not be_file }
+    %w(
+      guava-11.0.2.jar
+      jackson-core-asl-1.8.8.jar
+      jackson-jaxrs-1.8.8.jar
+      jackson-mapper-asl-1.8.8.jar
+      jackson-xc-1.8.8.jar
+    ).each do |deleted_file|
+      describe file("#{dir}/lib/#{deleted_file}") do
+        it { should_not be_file }
+      end
     end
 
-    describe file("#{dir}/lib/guava-14.0.1.jar") do
-      it { should be_file }
+    %w(
+      guava-14.0.1.jar
+      jackson-core-asl-1.9.12.jar
+      jackson-jaxrs-1.9.12.jar
+      jackson-mapper-asl-1.9.12.jar
+      jackson-xc-1.9.12.jar
+    ).each do |created_file|
+      describe file("#{dir}/lib/#{created_file}") do
+        it { should be_file }
+      end
     end
   end
 

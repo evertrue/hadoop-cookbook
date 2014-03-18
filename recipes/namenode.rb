@@ -71,19 +71,19 @@ end
   lib_dir
   hdfs_lib_dir
 ).each do |dir|
-  file node['hadoop'][dir] +
-    "/lib/guava-#{node['hadoop']['guava']['delete_version']}.jar" do
-    action :delete
-  end
+  node['hadoop']['replace_libs'].each do |lib|
+    file node['hadoop'][dir] + lib['delete_file'] do
+      action :delete
+    end
 
-  remote_file node['hadoop'][dir] +
-    "/lib/guava-#{node['hadoop']['guava']['version']}.jar" do
-    owner    'root'
-    group    'root'
-    mode     0644
-    source   'file://' + Chef::Config['file_cache_path'] +
-      "/guava-#{node['hadoop']['guava']['version']}.jar"
-    checksum node['hadoop']['guava']['checksum']
-    notifies :restart, 'service[hadoop-hdfs-namenode]'
+    remote_file node['hadoop'][dir] + lib['new_file'] do
+      owner    'root'
+      group    'root'
+      mode     0644
+      source   'file://' + Chef::Config['file_cache_path'] + '/hadoop' +
+        lib['new_file']
+      checksum lib['checksum']
+      notifies :restart, 'service[hadoop-hdfs-namenode]'
+    end
   end
 end
