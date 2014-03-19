@@ -49,8 +49,9 @@ execute 'update_hadoop_alternatives' do
   action :run
 end
 
-node['hadoop']['replace_libs'].each do |lib|
-  directory File.dirname(Chef::Config['file_cache_path'] + '/hadoop' + lib['new_file']) do
+node['hadoop']['custom_libs'].each do |lib|
+  directory File.dirname(Chef::Config['file_cache_path'] + '/hadoop' +
+    lib['new_file']) do
     recursive true
   end
 

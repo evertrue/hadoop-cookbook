@@ -1,3 +1,7 @@
+## 1.2.3
+
+* [PLATFORM-325](https://evertroops.atlassian.net/browse/PLATFORM-325) - Add MySQL Connector JAR to Hadoop
+
 ## 1.2.2
 
 * Fix broken notify structure.

@@ -34,9 +34,11 @@ end
   lib_dir
   mapred_lib_dir
 ).each do |dir|
-  node['hadoop']['replace_libs'].each do |lib|
-    file node['hadoop'][dir] + lib['delete_file'] do
-      action :delete
+  node['hadoop']['custom_libs'].each do |lib|
+    if lib['delete_file']
+      file node['hadoop'][dir] + lib['delete_file'] do
+        action :delete
+      end
     end
 
     remote_file node['hadoop'][dir] + lib['new_file'] do

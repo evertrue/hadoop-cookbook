@@ -16,7 +16,7 @@ default['hadoop']['guava']['delete_version'] = '11.0.2'
 default['hadoop']['guava']['checksum'] =
   'd69df3331840605ef0e5fe4add60f2d28e870e3820937ea29f713d2035d9ab97'
 
-default['hadoop']['replace_libs'] = [
+default['hadoop']['custom_libs'] = [
   {
     'delete_file' => '/lib/guava-11.0.2.jar',
     'new_file' => '/lib/guava-14.0.1.jar',
@@ -47,6 +47,11 @@ default['hadoop']['replace_libs'] = [
     'new_file' => '/lib/jackson-xc-1.9.12.jar',
     'source' => 'http://ops.evertrue.com.s3.amazonaws.com/pkgs/jackson-xc-1.9.12.jar',
     'checksum' => '63b43105cb043bf23e8e8302458ce5ffa67c70c514bb58f89da2855f410d2f61'
+  },
+  {
+    'new_file' => '/lib/mysql-connector-java-5.1.24.jar',
+    'source' => 'http://ops.evertrue.com.s3.amazonaws.com/pkgs/mysql-connector-java-5.1.24.jar',
+    'checksum' => 'f4349b4f3770fabc8eda03b86015edb3cf07b19009c97158b64ebba45c2cb4ba'
   }
 ]
 
