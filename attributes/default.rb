@@ -71,6 +71,20 @@ default['hadoop']['data_dir'] = "#{node['hadoop']['data_root']}/dfs"
 
 default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
 
+default['hadoop']['env_default'] = {
+  'hadoop' => {
+    'HADOOP_HOME_WARN_SUPPRESS' => 'true',
+    'HADOOP_PREFIX' => node['hadoop']['lib_dir'],
+    'HADOOP_LIBEXEC_DIR' => "#{node['hadoop']['lib_dir']}/libexec",
+    'HADOOP_CONF_DIR' => "#{node['hadoop']['conf_root']}/conf",
+    'HADOOP_COMMON_HOME' => node['hadoop']['lib_dir'],
+    'HADOOP_HDFS_HOME' => node['hadoop']['hdfs_lib_dir'],
+    'HADOOP_MAPRED_HOME' => node['hadoop']['mapred_lib_dir'],
+    'YARN_HOME' => '/usr/lib/hadoop-yarn',
+    'JSVC_HOME' => '/usr/lib/bigtop-utils'
+  }
+}
+
 ## Main Hadoop XML files...
 
 # core-site.xml

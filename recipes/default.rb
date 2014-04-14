@@ -128,6 +128,16 @@ end
   end
 end
 
+node['hadoop']['env_default'].each do |conf_file, conf_data|
+  template "/etc/default/#{conf_file}" do
+    source "#{conf_file}-default.erb"
+    owner  'root'
+    group  'root'
+    mode   0644
+    variables(conf_data: conf_data)
+  end
+end
+
 # Config files to deal with:
 #
 %w{
