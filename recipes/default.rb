@@ -124,6 +124,7 @@ end
 %w{
   core-site
   hdfs-site
+  hadoop-site
   hadoop-policy
   mapred-site
 }.each do |conf_file|

@@ -1,3 +1,7 @@
+## 1.2.6
+
+* Add hadoop-site directory to conf file management
+
 ## 1.2.5
 
 * Move global tmp dir to /mnt/tmp
