@@ -1,3 +1,7 @@
+## 1.2.5
+
+* Move global tmp dir to /mnt/tmp
+
 ## 1.2.4
 
 * [PLATFORM-394](https://evertroops.atlassian.net/browse/PLATFORM-394) - Support overriding/adding things to hadoop startup environment
