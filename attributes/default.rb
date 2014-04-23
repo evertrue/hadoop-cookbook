@@ -90,7 +90,7 @@ default['hadoop']['env_default'] = {
 ## Main Hadoop XML files...
 
 # hadoop-site.xml
-default['hadoop']['hadoop-site']['hadoop.tmp.dir'] =
+default['hadoop']['core-site']['hadoop.tmp.dir'] =
   "#{node['hadoop']['tmp_root']}/hadoop-${user.name}"
 
 # hdfs-site.xml

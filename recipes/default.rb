@@ -124,7 +124,6 @@ end
 %w{
   core-site
   hdfs-site
-  hadoop-site
   hadoop-policy
   mapred-site
 }.each do |conf_file|
@@ -135,6 +134,10 @@ end
     mode 0644
     variables(conf_file: conf_file)
   end
+end
+
+file "#{node['hadoop']['conf_dir']}/hadoop-site.xml" do
+  action :delete
 end
 
 node['hadoop']['env_default'].each do |conf_file, conf_data|

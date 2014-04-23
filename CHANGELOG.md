@@ -1,3 +1,7 @@
+## 1.2.7
+
+* Move tmp dir changes to core-site.xml
+
 ## 1.2.6
 
 * Add hadoop-site directory to conf file management
