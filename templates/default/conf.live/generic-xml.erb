@@ -5,7 +5,7 @@
 <% node['hadoop'][@conf_file].each do |name,value| -%>
   <property>
     <name><%= name %></name>
-    <value><%= value %></value>
+    <value><%= [Array, Chef::Node::ImmutableArray].include?(value.class) ? value.join(',') : value %></value>
   </property>
 <% end -%>
 </configuration>

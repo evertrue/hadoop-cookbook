@@ -1,8 +1,5 @@
 # coding=utf-8
 
-node.set['hadoop']['hdfs-site']['dfs.datanode.name.dir'] =
-  node['hadoop']['data_dir'] + '/dn'
-
 include_recipe 'hadoop::repo'
 
 %w(
@@ -14,12 +11,14 @@ end
 
 include_recipe 'hadoop::default'
 
-directory node['hadoop']['hdfs-site']['dfs.datanode.name.dir'] do
-  owner node['hadoop']['hdfs_user']
-  group node['hadoop']['hdfs_group']
-  mode 0700
-  action :create
-  recursive true
+node['hadoop']['hdfs-site']['dfs.datanode.name.dir'].each do |dir|
+  directory dir do
+    owner node['hadoop']['hdfs_user']
+    group node['hadoop']['hdfs_group']
+    mode 0700
+    action :create
+    recursive true
+  end
 end
 
 %w(

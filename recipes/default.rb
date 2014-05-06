@@ -16,6 +16,16 @@ if Gem::Version.new(Chef::VERSION) < Gem::Version.new('11.10.0')
     "(Found: #{Chef::VERSION})."
 end
 
+node.set['hadoop']['data_dir'] =
+  node['hadoop']['data_root'].map { |d| "#{d}/dfs" }
+
+node.set['hadoop']['hdfs-site']['dfs.datanode.name.dir'] =
+  node['hadoop']['data_dir'].map { |dir| dir + '/dn' }
+node.set['hadoop']['hdfs-site']['dfs.namenode.name.dir'] =
+  node['hadoop']['data_dir'].map { |dir| dir + '/nn' }
+node.set['hadoop']['core-site']['hadoop.tmp.dir'] =
+  node['hadoop']['tmp_root'].map { |d| "#{d}/hadoop-${user.name}" }
+
 case node['platform_family']
 when 'debian'
   include_recipe 'apt'
@@ -30,12 +40,14 @@ directory node['hadoop']['conf_dir'] do
   action :create
 end
 
-directory node['hadoop']['tmp_root'] do
-  owner 'root'
-  group 'root'
-  mode 0777
-  action :create
-  recursive true
+node['hadoop']['tmp_root'].each do |dir|
+  directory dir do
+    owner 'root'
+    group 'root'
+    mode 0777
+    action :create
+    recursive true
+  end
 end
 
 case node['platform_family']
@@ -108,17 +120,19 @@ end
 
 node.set['hadoop']['core-site']['fs.defaultFS'] = 'hdfs://' \
   "#{node['hadoop']['hosts']['namenode']}/"
-node.set['hadoop']['mapred-site'] = {
-  'mapred.job.tracker' => "#{node['hadoop']['hosts']['jobtracker']}:8021",
-  'mapred.local.dir' => "#{node['hadoop']['data_root']}/mapred/local"
-}
+node.set['hadoop']['mapred-site']['mapred.local.dir'] =
+  node['hadoop']['data_root'].map { |dir| dir + '/mapred/local' }
+node.set['hadoop']['mapred-site']['mapred.job.tracker'] =
+  "#{node['hadoop']['hosts']['jobtracker']}:8021"
 
-directory node['hadoop']['mapred-site']['mapred.local.dir'] do
-  owner node['hadoop']['mapred_user']
-  group node['hadoop']['group']
-  mode '0755'
-  action :create
-  recursive true
+node['hadoop']['mapred-site']['mapred.local.dir'].each do |dir|
+  directory dir do
+    owner node['hadoop']['mapred_user']
+    group node['hadoop']['group']
+    mode '0755'
+    action :create
+    recursive true
+  end
 end
 
 %w(

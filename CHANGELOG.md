@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Add support for multiple data storage directories
+
 ## 1.2.7
 
 * Move tmp dir changes to core-site.xml

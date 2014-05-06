@@ -1,24 +1,25 @@
 # coding=utf-8
 
-node.set['hadoop']['hdfs-site']['dfs.namenode.name.dir'] =
-  node['hadoop']['data_dir'] + '/nn'
-
 include_recipe 'hadoop::repo'
 
 package 'hadoop-hdfs-namenode'
 
-directory node['hadoop']['hdfs-site']['dfs.namenode.name.dir'] do
-  owner node['hadoop']['hdfs_user']
-  group node['hadoop']['hdfs_group']
-  mode 0700
-  action :create
-  recursive true
+# Must come after package install because it depends on a directory
+# structure having been created.
+include_recipe 'hadoop::default'
+
+node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].each do |dir|
+  directory dir do
+    owner node['hadoop']['hdfs_user']
+    group node['hadoop']['hdfs_group']
+    mode 0700
+    action :create
+    recursive true
+  end
 end
 
 node.set['hadoop']['hdfs-site']['dfs.namenode.http-address'] = '0.0.0.0:50070'
 node.set['hadoop']['hosts']['namenode'] = node['fqdn']
-
-include_recipe 'hadoop::default'
 
 execute 'mkdir_hdfs_tmp' do
   command 'hadoop fs -mkdir /tmp && ' \
@@ -51,20 +52,16 @@ end
 execute 'format_namenode' do
   command 'hdfs namenode -format'
   user node['hadoop']['hdfs_user']
-  creates "#{node['hadoop']['hdfs-site']['dfs.namenode.name.dir']}/current"
+  creates "#{node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].last}/current"
   not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /"
 end
 
-%w{
-  hadoop-hdfs-namenode
-}.each do |hadoop_svc|
-  service hadoop_svc do
-    supports status: :true, restart: :true
-    action [:enable, :start]
-    notifies :run, 'execute[mkdir_hdfs_tmp]'
-    notifies :run, 'execute[create_mr_var_dirs]'
-    notifies :run, 'execute[mapred_system_dirs]'
-  end
+service 'hadoop-hdfs-namenode' do
+  supports status: :true, restart: :true
+  action [:enable, :start]
+  notifies :run, 'execute[mkdir_hdfs_tmp]'
+  notifies :run, 'execute[create_mr_var_dirs]'
+  notifies :run, 'execute[mapred_system_dirs]'
 end
 
 %w(

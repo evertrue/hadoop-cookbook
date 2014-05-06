@@ -66,10 +66,8 @@ when 'debian'
   default['hadoop']['conf_root'] = '/etc/hadoop'
 end
 
-default['hadoop']['data_root'] = '/mnt/data'
-default['hadoop']['tmp_root'] = '/mnt/tmp'
-
-default['hadoop']['data_dir'] = "#{node['hadoop']['data_root']}/dfs"
+default['hadoop']['data_root'] = ['/mnt/data']
+default['hadoop']['tmp_root'] = ['/mnt/tmp']
 
 default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
 
@@ -88,10 +86,6 @@ default['hadoop']['env_default'] = {
 }
 
 ## Main Hadoop XML files...
-
-# hadoop-site.xml
-default['hadoop']['core-site']['hadoop.tmp.dir'] =
-  "#{node['hadoop']['tmp_root']}/hadoop-${user.name}"
 
 # hdfs-site.xml
 default['hadoop']['hdfs-site']['dfs.permissions.superusergroup'] = 'hadoop'
