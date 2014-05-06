@@ -79,10 +79,10 @@ end
     end
 
     remote_file node['hadoop'][dir] + lib['new_file'] do
-      owner    'root'
-      group    'root'
-      mode     0644
-      source   'file://' + Chef::Config['file_cache_path'] + '/hadoop' +
+      owner 'root'
+      group 'root'
+      mode 0644
+      source 'file://' + Chef::Config['file_cache_path'] + '/hadoop' +
         lib['new_file']
       checksum lib['checksum']
       notifies :restart, 'service[hadoop-hdfs-namenode]'

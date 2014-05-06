@@ -5,10 +5,10 @@ node.set['hadoop']['hdfs-site']['dfs.datanode.name.dir'] =
 
 include_recipe 'hadoop::repo'
 
-%w{
+%w(
   hadoop-0.20-mapreduce-tasktracker
   hadoop-hdfs-datanode
-}.each do |pkg|
+).each do |pkg|
   package pkg
 end
 
@@ -22,10 +22,10 @@ directory node['hadoop']['hdfs-site']['dfs.datanode.name.dir'] do
   recursive true
 end
 
-%w{
+%w(
   hadoop-hdfs-datanode
   hadoop-0.20-mapreduce-tasktracker
-}.each do |hadoop_svc|
+).each do |hadoop_svc|
   service hadoop_svc do
     supports status: :true, restart: :true
     action [:enable, :start]
@@ -45,10 +45,10 @@ end
     end
 
     remote_file node['hadoop'][dir] + lib['new_file'] do
-      owner    'root'
-      group    'root'
-      mode     0644
-      source   'file://' + Chef::Config['file_cache_path'] + '/hadoop' +
+      owner 'root'
+      group 'root'
+      mode 0644
+      source 'file://' + Chef::Config['file_cache_path'] + '/hadoop' +
         lib['new_file']
       checksum lib['checksum']
       notifies :restart, 'service[hadoop-hdfs-datanode]'

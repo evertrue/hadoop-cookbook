@@ -46,7 +46,7 @@ when 'debian'
 end
 
 execute 'update_hadoop_alternatives' do
-  command "#{alternatives_cmd} " +
+  command "#{alternatives_cmd} " \
     "--install #{node['hadoop']['conf_root']}/conf " +
     'hadoop-conf ' +
     "#{node['hadoop']['conf_dir']} " +
@@ -64,10 +64,10 @@ node['hadoop']['custom_libs'].each do |lib|
   end
 
   remote_file Chef::Config['file_cache_path'] + '/hadoop' + lib['new_file'] do
-    owner    'root'
-    group    'root'
-    mode     0644
-    source   lib['source']
+    owner 'root'
+    group 'root'
+    mode 0644
+    source lib['source']
     checksum lib['checksum']
   end
 end
@@ -80,7 +80,7 @@ end
     node.recipes.include?("hadoop::#{nodetype}")
     node.set['hadoop']['hosts'][nodetype] = node['hadoop']['local_fqdn']
     Chef::Log.info "Set #{nodetype} to self because it is in one of my" \
-      "roles/recipes"
+      'roles/recipes'
   else
     r = search(
       :node,
@@ -106,7 +106,7 @@ end
     "<#{node['hadoop']['hosts'][nodetype]}>"
 end
 
-node.set['hadoop']['core-site']['fs.defaultFS'] = "hdfs://" \
+node.set['hadoop']['core-site']['fs.defaultFS'] = 'hdfs://' \
   "#{node['hadoop']['hosts']['namenode']}/"
 node.set['hadoop']['mapred-site'] = {
   'mapred.job.tracker' => "#{node['hadoop']['hosts']['jobtracker']}:8021",
@@ -121,12 +121,12 @@ directory node['hadoop']['mapred-site']['mapred.local.dir'] do
   recursive true
 end
 
-%w{
+%w(
   core-site
   hdfs-site
   hadoop-policy
   mapred-site
-}.each do |conf_file|
+).each do |conf_file|
   template "#{node['hadoop']['conf_dir']}/#{conf_file}.xml" do
     source 'conf.live/generic-xml.erb'
     owner 'root'
@@ -143,22 +143,22 @@ end
 node['hadoop']['env_default'].each do |conf_file, conf_data|
   template "/etc/default/#{conf_file}" do
     source "#{conf_file}-default.erb"
-    owner  'root'
-    group  'root'
-    mode   0644
+    owner 'root'
+    group 'root'
+    mode 0644
     variables(conf_data: conf_data)
   end
 end
 
 # Config files to deal with:
 #
-%w{
+%w(
   configuration.xsl
   hadoop-metrics2.properties
   hadoop-metrics.properties
   log4j.properties
   slaves
-}.each do |conf_file|
+).each do |conf_file|
   remote_file "#{node['hadoop']['conf_dir']}/#{conf_file}" do
     source "file://#{node['hadoop']['conf_root']}/conf.empty/#{conf_file}"
     owner 'root'
