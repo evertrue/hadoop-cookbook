@@ -13,15 +13,15 @@ else
 end
 
 apt_repository 'cloudera' do
-  uri 'http://archive.cloudera.com/cdh4' \
+  uri "http://archive.cloudera.com/#{node['hadoop']['version']}" \
     "/#{node['platform']}" \
     "/#{node['lsb']['codename']}" \
     "/#{arch_name}" \
     '/cdh'
-  distribution "#{node['lsb']['codename']}-cdh4"
+  distribution "#{node['lsb']['codename']}-#{node['hadoop']['version']}"
   arch arch_name
   components ['contrib']
-  key 'http://archive.cloudera.com/cdh4' \
+  key "http://archive.cloudera.com/#{node['hadoop']['version']}" \
     "/#{node['platform']}" \
     "/#{node['lsb']['codename']}" \
     "/#{arch_name}" \
