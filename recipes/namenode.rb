@@ -41,9 +41,9 @@ execute 'create_mr_var_dirs' do
 end
 
 execute 'mapred_system_dirs' do
-  command 'hadoop fs -mkdir /tmp/mapred/system && ' \
-    "hadoop fs -chown #{node['hadoop']['mapred_user']}:#{node['hadoop']['group']} " \
-    '/tmp/mapred/system'
+  command 'hadoop fs -mkdir -p /tmp/mapred/system && ' \
+    "hadoop fs -chown -R #{node['hadoop']['mapred_user']}:#{node['hadoop']['group']} " \
+    '/tmp/mapred'
   user node['hadoop']['hdfs_user']
   not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /tmp/mapred/system"
   action :nothing
