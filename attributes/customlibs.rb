@@ -1,8 +1,3 @@
-default['hadoop']['guava']['version'] = '14.0.1'
-default['hadoop']['guava']['delete_version'] = '11.0.2'
-default['hadoop']['guava']['checksum'] =
-  'd69df3331840605ef0e5fe4add60f2d28e870e3820937ea29f713d2035d9ab97'
-
 default['hadoop']['custom_libs'] = [
   {
     'delete_file' => '/lib/guava-11.0.2.jar',
