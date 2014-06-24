@@ -124,6 +124,8 @@ node.set['hadoop']['mapred-site']['mapred.local.dir'] =
   node['hadoop']['data_root'].map { |dir| dir + '/mapred/local' }
 node.set['hadoop']['mapred-site']['mapred.job.tracker'] =
   "#{node['hadoop']['hosts']['jobtracker']}:8021"
+node.set['hadoop']['mapred-site']['mapred.tasktracker.map.tasks.maximum'] =
+  "4"
 
 node['hadoop']['mapred-site']['mapred.local.dir'].each do |dir|
   directory dir do
