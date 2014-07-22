@@ -34,5 +34,11 @@ default['hadoop']['custom_libs'] = [
     'new_file' => '/lib/mysql-connector-java-5.1.24.jar',
     'source' => 'http://ops.evertrue.com.s3.amazonaws.com/pkgs/mysql-connector-java-5.1.24.jar',
     'checksum' => 'f4349b4f3770fabc8eda03b86015edb3cf07b19009c97158b64ebba45c2cb4ba'
+  },
+  {
+    'delete_file' => '/lib/snappy-java-1.0.4.1.jar',
+    'new_file' => '/lib/snappy-java-1.1.0.1.jar',
+    'source' => 'http://central.maven.org/maven2/org/xerial/snappy/snappy-java/1.1.0.1/snappy-java-1.1.0.1.jar',
+    'checksum' => '563eacba41f76f5dc086afe2cfca60ec1c961b70b69f1e94d7b34740dc3e3af5'
   }
 ]
