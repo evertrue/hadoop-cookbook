@@ -1,3 +1,7 @@
+## 2.0.1
+
+* New custom library: snappy-java
+
 ## 2.0.0
 
 * Add support for multiple data storage directories
