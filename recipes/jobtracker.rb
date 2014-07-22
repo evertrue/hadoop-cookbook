@@ -1,10 +1,12 @@
 # coding=utf-8
 
+include_recipe 'hadoop::repo'
+
 node.set['hadoop']['hosts']['jobtracker'] = node['fqdn']
 
-include_recipe 'hadoop::default'
-
 package 'hadoop-0.20-mapreduce-jobtracker'
+
+include_recipe 'hadoop::default'
 
 execute 'create_user_dir' do
   command 'hadoop fs -mkdir /user'

@@ -4,6 +4,34 @@ include_recipe 'hadoop::repo'
 
 package 'hadoop-hdfs-namenode'
 
+node.set['hadoop']['data_dir'] =
+  node['hadoop']['data_root'].map { |d| "#{d}/dfs" }
+node.set['hadoop']['hdfs-site']['dfs.namenode.name.dir'] =
+  node['hadoop']['data_dir'].map { |dir| dir + '/nn' }
+
+node.set['hadoop']['hdfs-site']['dfs.namenode.http-address'] = '0.0.0.0:50070'
+node.set['hadoop']['core-site']['fs.defaultFS'] = 'hdfs://0.0.0.0/'
+
+r = search(
+  :node,
+  "chef_environment:#{node.chef_environment} AND " \
+    "hadoop_cluster-name:#{node['hadoop']['cluster-name']} AND " \
+    '(recipes:hadoop\\:\\:jobtracker OR ' \
+    'roles:jobtracker)'
+)
+
+if r.empty?
+  fail 'Could not find the jobtracker'
+elsif r.count > 1
+  fail "Found #{r.count} servers with role jobtracker: " \
+    "#{r.map { |s| s['fqdn'] }.join(', ')}"
+else
+  node.set['hadoop']['hosts']['jobtracker'] = r.first['fqdn']
+end
+
+Chef::Log.info 'Hadoop: Set jobtracker to ' \
+  "<#{node['hadoop']['hosts']['jobtracker']}>"
+
 # Must come after package install because it depends on a directory
 # structure having been created.
 include_recipe 'hadoop::default'
@@ -17,9 +45,6 @@ node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].each do |dir|
     recursive true
   end
 end
-
-node.set['hadoop']['hdfs-site']['dfs.namenode.http-address'] = '0.0.0.0:50070'
-node.set['hadoop']['hosts']['namenode'] = node['fqdn']
 
 execute 'mkdir_hdfs_tmp' do
   command 'hadoop fs -mkdir /tmp && ' \

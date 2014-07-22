@@ -16,13 +16,6 @@ if Gem::Version.new(Chef::VERSION) < Gem::Version.new('11.10.0')
     "(Found: #{Chef::VERSION})."
 end
 
-node.set['hadoop']['data_dir'] =
-  node['hadoop']['data_root'].map { |d| "#{d}/dfs" }
-
-node.set['hadoop']['hdfs-site']['dfs.datanode.name.dir'] =
-  node['hadoop']['data_dir'].map { |dir| dir + '/dn' }
-node.set['hadoop']['hdfs-site']['dfs.namenode.name.dir'] =
-  node['hadoop']['data_dir'].map { |dir| dir + '/nn' }
 node.set['hadoop']['core-site']['hadoop.tmp.dir'] =
   node['hadoop']['tmp_root'].map { |d| "#{d}/hadoop-${user.name}" }
 
@@ -71,42 +64,6 @@ end
 
 include_recipe 'hadoop::customlibs'
 
-%w(
-  namenode
-  jobtracker
-).each do |nodetype|
-  if node.roles.include?(nodetype) ||
-    node.recipes.include?("hadoop::#{nodetype}")
-    node.set['hadoop']['hosts'][nodetype] = node['hadoop']['local_fqdn']
-    Chef::Log.info "Set #{nodetype} to self because it is in one of my" \
-      'roles/recipes'
-  else
-    r = search(
-      :node,
-      "chef_environment:#{node.chef_environment} AND " \
-        "hadoop_cluster-name:#{node['hadoop']['cluster-name']} AND " \
-        "(recipes:hadoop\\:\\:#{nodetype} OR " \
-        "roles:#{nodetype})"
-    )
-
-    if r.empty?
-      fail "Could not find the #{nodetype}"
-    elsif r.count > 1
-      fail "Found #{r.count} servers with role #{nodetype}: " \
-        "#{r.map { |s| s['fqdn'] }.join(', ')}"
-    else
-      node.set['hadoop']['hosts'][nodetype] = r.first['fqdn']
-    end
-
-    Chef::Log.debug "Set #{nodetype} from search results: #{r.inspect}"
-  end
-
-  Chef::Log.info "Hadoop: Set #{nodetype} to " \
-    "<#{node['hadoop']['hosts'][nodetype]}>"
-end
-
-node.set['hadoop']['core-site']['fs.defaultFS'] = 'hdfs://' \
-  "#{node['hadoop']['hosts']['namenode']}/"
 node.set['hadoop']['mapred-site']['mapred.local.dir'] =
   node['hadoop']['data_root'].map { |dir| dir + '/mapred/local' }
 node.set['hadoop']['mapred-site']['mapred.job.tracker'] =
