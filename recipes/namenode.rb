@@ -10,7 +10,7 @@ node.set['hadoop']['hdfs-site']['dfs.namenode.name.dir'] =
   node['hadoop']['data_dir'].map { |dir| dir + '/nn' }
 
 node.set['hadoop']['hdfs-site']['dfs.namenode.http-address'] = '0.0.0.0:50070'
-node.set['hadoop']['core-site']['fs.defaultFS'] = 'hdfs://0.0.0.0/'
+node.set['hadoop']['core-site']['fs.defaultFS'] = "hdfs://#{node['fqdn']}/"
 
 r = search(
   :node,
