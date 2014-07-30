@@ -1,3 +1,7 @@
+## 2.0.3
+
+* Use string instead of array for hadoop.tmp.dir
+
 ## 2.0.2
 
 * Use fqdn for core-site/fs.defaultFS instead of 0.0.0.0
