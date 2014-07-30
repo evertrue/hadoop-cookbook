@@ -17,7 +17,7 @@ if Gem::Version.new(Chef::VERSION) < Gem::Version.new('11.10.0')
 end
 
 node.set['hadoop']['core-site']['hadoop.tmp.dir'] =
-  node['hadoop']['tmp_root'].map { |d| "#{d}/hadoop-${user.name}" }
+  "#{node['hadoop']['tmp_root']}/hadoop-${user.name}"
 
 case node['platform_family']
 when 'debian'
