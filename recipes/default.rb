@@ -63,12 +63,12 @@ end
 include_recipe 'hadoop::customlibs'
 
 node.set['hadoop']['mapred-site']['mapred.local.dir'] =
-  node['hadoop']['data_root'].map { |dir| dir + '/mapred/local' }
+  node['hadoop']['data_root'].map { |dir| dir.sub(%r{file://}, '') + '/mapred/local' }
 node.set['hadoop']['mapred-site']['mapred.job.tracker'] =
   "#{node['hadoop']['hosts']['jobtracker']}:8021"
 
 node['hadoop']['mapred-site']['mapred.local.dir'].each do |dir|
-  directory dir do
+  directory dir.sub(%r{file://}, '') do
     owner node['hadoop']['mapred_user']
     group node['hadoop']['group']
     mode '0755'

@@ -37,7 +37,7 @@ Chef::Log.info 'Hadoop: Set jobtracker to ' \
 include_recipe 'hadoop::default'
 
 node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].each do |dir|
-  directory dir do
+  directory dir.sub(%r{^file://}, '') do
     owner node['hadoop']['hdfs_user']
     group node['hadoop']['hdfs_group']
     mode 0700
@@ -77,7 +77,7 @@ end
 execute 'format_namenode' do
   command 'hdfs namenode -format'
   user node['hadoop']['hdfs_user']
-  creates "#{node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].last}/current"
+  creates "#{node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].last.sub(%r{^file://}, '')}/current"
   not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /"
 end
 
