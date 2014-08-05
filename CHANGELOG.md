@@ -1,3 +1,8 @@
+## 2.0.4
+
+* Stop treating tmp_root as a string on directory creation
+* Remove file:// notation when using data dir paths in chef resources
+
 ## 2.0.3
 
 * Use string instead of array for hadoop.tmp.dir
