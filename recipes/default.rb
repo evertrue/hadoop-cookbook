@@ -33,14 +33,12 @@ directory node['hadoop']['conf_dir'] do
   action :create
 end
 
-node['hadoop']['tmp_root'].each do |dir|
-  directory dir do
-    owner 'root'
-    group 'root'
-    mode 0777
-    action :create
-    recursive true
-  end
+directory node['hadoop']['tmp_root'] do
+  owner 'root'
+  group 'root'
+  mode 0777
+  action :create
+  recursive true
 end
 
 case node['platform_family']
