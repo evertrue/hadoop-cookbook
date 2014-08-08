@@ -1,1 +1,1 @@
-default['hadoop']['version'] = 'cdh5'
+default['hadoop']['version'] = 'cdh4'
