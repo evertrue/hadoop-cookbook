@@ -1,4 +1,9 @@
 # coding: utf-8
+default['hadoop']['package_version'] =
+  value_for_platform_family(
+    'debian' => '2.0.0+1604-1.cdh4.7.0.p0.17~precise-cdh4.7.0'
+  )
+
 default['hadoop']['core-site'] = {}
 default['hadoop']['hdfs-site'] = {}
 default['hadoop']['hadoop-policy'] = {}

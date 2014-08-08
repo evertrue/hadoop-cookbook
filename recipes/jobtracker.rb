@@ -4,7 +4,9 @@ include_recipe 'hadoop::repo'
 
 node.set['hadoop']['hosts']['jobtracker'] = node['fqdn']
 
-package 'hadoop-0.20-mapreduce-jobtracker'
+package 'hadoop-0.20-mapreduce-jobtracker' do
+  version node['hadoop']['package_version']
+end
 
 include_recipe 'hadoop::default'
 

@@ -2,7 +2,9 @@
 
 include_recipe 'hadoop::repo'
 
-package 'hadoop-hdfs-namenode'
+package 'hadoop-hdfs-namenode' do
+  version node['hadoop']['package_version']
+end
 
 node.set['hadoop']['data_dir'] =
   node['hadoop']['data_root'].map { |d| "#{d}/dfs" }

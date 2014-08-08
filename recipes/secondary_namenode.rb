@@ -2,4 +2,6 @@
 
 include_recipe 'hadoop::default'
 
-package 'hadoop-hdfs-secondarynamenode'
+package 'hadoop-hdfs-secondarynamenode' do
+  version node['hadoop']['package_version']
+end

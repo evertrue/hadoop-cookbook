@@ -6,7 +6,9 @@ include_recipe 'hadoop::repo'
   hadoop-0.20-mapreduce-tasktracker
   hadoop-hdfs-datanode
 ).each do |pkg|
-  package pkg
+  package pkg do
+    version node['hadoop']['package_version']
+  end
 end
 
 node.set['hadoop']['data_dir'] =
