@@ -1,3 +1,8 @@
+## 2.1.0
+
+* Hard-code hadoop package version
+* Switch to CDH 4 to reflect what is actually being used in our prod environment
+
 ## 2.0.4
 
 * Stop treating tmp_root as a string on directory creation
