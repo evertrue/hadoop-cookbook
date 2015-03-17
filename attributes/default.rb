@@ -28,7 +28,7 @@ when 'debian'
 end
 
 default['hadoop']['data_root'] = ['/mnt/data']
-default['hadoop']['tmp_root'] = ['/mnt/tmp']
+default['hadoop']['tmp_root'] = '/mnt/tmp'
 
 default['hadoop']['conf_dir'] = "#{node['hadoop']['conf_root']}/conf.live"
 
