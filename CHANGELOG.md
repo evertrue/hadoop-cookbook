@@ -1,3 +1,10 @@
+## 2.1.1
+
+* Add test data
+* Make tests rspec 3 compatible
+* Make tmp_root string instead of array
+* Change guard sudo behavior to suit current chef version
+
 ## 2.1.0
 
 * Hard-code hadoop package version
