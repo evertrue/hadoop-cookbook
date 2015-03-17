@@ -48,12 +48,17 @@ node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].each do |dir|
   end
 end
 
+sudo_run_as_cmd = ''
+if Chef::VersionConstraint.new('< 12.0.0').include? Chef::VERSION
+  sudo_run_as_cmd = "sudo -u #{node['hadoop']['hdfs_user']} "
+end
+
 execute 'mkdir_hdfs_tmp' do
   command 'hadoop fs -mkdir /tmp && ' \
     'hadoop fs -chmod -R 1777 /tmp'
   user node['hadoop']['hdfs_user']
   action :nothing
-  not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /tmp"
+  not_if "#{sudo_run_as_cmd}hadoop fs -ls /tmp"
 end
 
 execute 'create_mr_var_dirs' do
@@ -62,7 +67,7 @@ execute 'create_mr_var_dirs' do
    "hadoop fs -chown -R #{node['hadoop']['mapred_user']} " \
    '/var/lib/hadoop-hdfs/cache/mapred/mapred'
   user node['hadoop']['hdfs_user']
-  not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls " \
+  not_if "#{sudo_run_as_cmd}hadoop fs -ls " \
     '/var/lib/hadoop-hdfs/cache/mapred/mapred/staging'
   action :nothing
 end
@@ -72,7 +77,7 @@ execute 'mapred_system_dirs' do
     "hadoop fs -chown -R #{node['hadoop']['mapred_user']}:#{node['hadoop']['group']} " \
     '/tmp/mapred'
   user node['hadoop']['hdfs_user']
-  not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /tmp/mapred/system"
+  not_if "#{sudo_run_as_cmd}hadoop fs -ls /tmp/mapred/system"
   action :nothing
 end
 
@@ -80,7 +85,7 @@ execute 'format_namenode' do
   command 'hdfs namenode -format'
   user node['hadoop']['hdfs_user']
   creates "#{node['hadoop']['hdfs-site']['dfs.namenode.name.dir'].last.sub(%r{^file://}, '')}/current"
-  not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /"
+  not_if "#{sudo_run_as_cmd}hadoop fs -ls /"
 end
 
 service 'hadoop-hdfs-namenode' do

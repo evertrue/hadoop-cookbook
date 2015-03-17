@@ -10,10 +10,15 @@ end
 
 include_recipe 'hadoop::default'
 
+sudo_run_as_cmd = ''
+if Chef::VersionConstraint.new('< 12.0.0').include? Chef::VERSION
+  sudo_run_as_cmd = "sudo -u #{node['hadoop']['hdfs_user']} "
+end
+
 execute 'create_user_dir' do
   command 'hadoop fs -mkdir /user'
   user node['hadoop']['hdfs_user']
-  not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /user"
+  not_if "#{sudo_run_as_cmd}hadoop fs -ls /user"
   action :nothing
 end
 
@@ -21,7 +26,7 @@ node['etc']['passwd'].select { |u, u_conf| u_conf['uid'] >= 5000 }.each do |user
   execute "create_mapred_user_#{user}" do
     command "hadoop fs -mkdir /user/#{user} && " +
       "hadoop fs -chown #{user} /user/#{user}"
-    not_if "sudo -u #{node['hadoop']['hdfs_user']} hadoop fs -ls /user/#{user}"
+    not_if "#{sudo_run_as_cmd}hadoop fs -ls /user/#{user}"
     user node['hadoop']['hdfs_user']
     subscribes :run, 'execute[create_user_dir]'
     action :nothing
